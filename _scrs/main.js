@@ -126,8 +126,6 @@ function load() {
 function activateRandom() {
 	$('.options #r').click(function() {
 		var rand = (Math.floor(Math.random()*10))%3;
-		console.log(rand); 
-		console.log(temp_rand[rand]); 
 		search(temp_rand[rand]);  
 	}); 
 }
@@ -187,17 +185,58 @@ function readFile(file,view) {
 				var allText = txtFile.responseText; 
 				lines= txtFile.responseText.split('\n'); 
 				if(view==VIEWHEATMAP) {
+					// var n = 0; 
 					for(var i = 0; i < lines.length; i++) {
 						if(lines[i].split("\t")[2]!=null) {
-							temp = lines[i].split("\t")[2].split(','); 
+							// check for location intensity
+							var intensity= parseInt(lines[i].split("\t")[9]); 
+							var point; 
+							if(intensity==null ||intensity<=1) intensity = 1;  
+							
+							temp = lines[i].split("\t")[2].split(',');  
 							coords[i] = temp; 
-							points[i] = new google.maps.LatLng(temp[0],temp[1]);
+							point = new google.maps.LatLng(temp[0],temp[1]); 
+							points[i] =  {location: point, weight: intensity};  
+							
+							// Hacky apprach: simulating weight by placing
+							//  points around actual coordinates
+							// -==========================================
+							// // check for how many times should a point be allocated
+							// var iterations; 
+							// if(lines[i].split("\t")[9]==null || 
+								// lines[i].split("\t")[9]<=0) iterations = 0;  
+							// else iterations = lines[i].split("\t")[9]-1; 
+							//  							
+							// // allocate actual point
+							// temp = lines[i].split("\t")[2].split(','); 
+							// coords[n] = temp; 
+							// points[n] = new google.maps.LatLng(temp[0],temp[1]);
+							// n++; 
+							// 							
+							// // allocate surrounding points for weight
+							// var theta = 360/iterations;
+							// var dist = 0.001;  
+							// var prov; 
+							// var x;
+							// var y;  
+							// for(var j = 0; j < iterations; j++) {
+								// // calculate x coordinate
+								// prov = Math.round(1000*temp[0])/1000;  
+								// x = prov+(dist*Math.round(1000*Math.cos(j*theta/180*Math.PI))/1000);
+								// // calculate y coordinate
+								// prov = Math.round(1000*temp[1])/1000;  
+								// y = prov+(dist*Math.round(1000*Math.sin(j*theta/180*Math.PI))/1000);
+								// // add point  
+								// points[n] = new google.maps.LatLng(x,y); 
+								// n++; 
+							// }
 						} 
 					}
 					heatmap = new google.maps.visualization.HeatmapLayer({
-						data:points
-					}); 
-					heatmap.setMap(map); 
+					  data: points, 
+					  radius: 10
+					});
+					heatmap.setMap(map);					
 				} else {
 					for(var i = 0; i < lines.length; i++) {
 						if(lines[i].split("\t")[2]!=null) {

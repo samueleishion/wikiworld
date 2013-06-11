@@ -46,8 +46,8 @@
  for a computational linguistics project supervised by Dr. Baldridge at the University 
  of Texas at Austin. <span id="title">WIKIWORLD</span> catalogs every time a given 
  word appears in different wikipedia articles and plots points on a map based on 
- the article&quot;s geolocation. </p>
- <p>For a better explanation and to view, use, share the code go to 
+ the article&rsquo;s geolocation. </p>
+ <p>For a better explanation and to view, use, and/or share the code go to 
   <a href="http://github.com/samueleishion/wikiworld" target="_new">http://github.com/samueleishion/wikiworld</a></p>
  <p><a href="#" id="close">close</a></p>	
 </div>
